@@ -31,7 +31,7 @@ class Game
 		show_board
 	end
 	
-	def player_move (x, y)
+	def player_move (y, x)
 		x_coord = x
 		y_coord = y
 		move(@symbol, y_coord, x_coord)
@@ -44,7 +44,7 @@ class Game
 			puts "blocked! x = #{x_coord} and y = #{y_coord}"
 			computer_move
 		else
-			move(@comp_symbol, x_coord, y_coord)
+			move(@comp_symbol, y_coord, x_coord)
 		end
 	end
 end
@@ -52,9 +52,11 @@ end
 def startGame
 	moves = 0
 	puts "What symbol would you like to play as?"
-	symbol = gets.chomp
+	s = gets.chomp
+	s == "X" ? comp_s = "O": comp_s = "X"
+	puts comp_s
 	game_finished = false
-	game = Game.new(symbol)
+	game = Game.new(s)
 	while moves < 9 && game_finished == false
 		if moves == 0
 			game.show_board
@@ -62,15 +64,46 @@ def startGame
 		puts "Your turn"
 		puts "Coordinates are 0-2 on the x-axis and 0-2 on the y-axis, inputted as such: '1,2'"
 		player_input = gets.strip.split(",")
+		puts "moves = #{moves}"
 		if game.check[player_input[1].to_i][player_input[0].to_i] != " "
 			puts "That cell is already taken"
 			redo
 		else
-			game.player_move(player_input[0].to_i, player_input[1].to_i) 
+			game.player_move(player_input[1].to_i, player_input[0].to_i) 
 			moves +=1
+			if (
+				game.check[0][0] == s && game.check[0][1] == s && game.check[0][2] == s ||
+				game.check[1][0] == s && game.check[1][1] == s && game.check[1][2] == s ||
+				game.check[2][0] == s && game.check[2][1] == s && game.check[2][2] == s ||
+				game.check[0][0] == s && game.check[1][1] == s && game.check[2][2] == s ||
+				game.check[0][0] == s && game.check[1][0] == s && game.check[2][0] == s ||
+				game.check[0][1] == s && game.check[1][1] == s && game.check[2][1] == s ||
+				game.check[0][2] == s && game.check[1][2] == s && game.check[2][2] == s ||
+				game.check[2][0] == s && game.check[1][1] == s && game.check[0][2] == s
+				)
+				puts "you win you clever some of a bitch"
+				return
+			end
+			if moves > 8 
+				puts "game over - it's a draw"
+				return
+			end
 		end
 		game.computer_move
 		moves +=1
+		if (
+			game.check[0][0] == comp_s && game.check[0][1] == comp_s && game.check[0][2] == comp_s ||
+			game.check[1][0] == comp_s && game.check[1][1] == comp_s && game.check[1][2] == comp_s ||
+			game.check[2][0] == comp_s && game.check[2][1] == comp_s && game.check[2][2] == comp_s ||
+			game.check[0][0] == comp_s && game.check[1][1] == comp_s && game.check[2][2] == comp_s ||
+			game.check[0][0] == comp_s && game.check[1][0] == comp_s && game.check[2][0] == comp_s ||
+			game.check[0][1] == comp_s && game.check[1][1] == comp_s && game.check[2][1] == comp_s ||
+			game.check[0][2] == comp_s && game.check[1][2] == comp_s && game.check[2][2] == comp_s ||
+			game.check[2][0] == comp_s && game.check[1][1] == comp_s && game.check[0][2] == comp_s
+			)
+			puts "you lost against an AI with the ability of a 2 week old baby you r-tard"
+			return
+		end
 	end
 end
 
