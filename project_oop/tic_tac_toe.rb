@@ -55,18 +55,16 @@ def startGame
 	s = gets.chomp
 	s == "X" ? comp_s = "O": comp_s = "X"
 	puts comp_s
-	game_finished = false
 	game = Game.new(s)
-	while moves < 9 && game_finished == false
+	while moves < 9
 		if moves == 0
 			game.show_board
+			puts "Coordinates are 0-2 on the x-axis and 0-2 on the y-axis, inputted as such: '1,2'"
 		end
 		puts "Your turn"
-		puts "Coordinates are 0-2 on the x-axis and 0-2 on the y-axis, inputted as such: '1,2'"
 		player_input = gets.strip.split(",")
-		puts "moves = #{moves}"
 		if game.check[player_input[1].to_i][player_input[0].to_i] != " "
-			puts "That cell is already taken"
+			puts "That cell is already taken you turd"
 			redo
 		else
 			game.player_move(player_input[1].to_i, player_input[0].to_i) 
@@ -81,7 +79,7 @@ def startGame
 				game.check[0][2] == s && game.check[1][2] == s && game.check[2][2] == s ||
 				game.check[2][0] == s && game.check[1][1] == s && game.check[0][2] == s
 				)
-				puts "you win you clever some of a bitch"
+				puts "you win you clever son of a bitch"
 				return
 			end
 			if moves > 8 
@@ -89,6 +87,7 @@ def startGame
 				return
 			end
 		end
+		puts "computer's move:"
 		game.computer_move
 		moves +=1
 		if (
@@ -101,7 +100,7 @@ def startGame
 			game.check[0][2] == comp_s && game.check[1][2] == comp_s && game.check[2][2] == comp_s ||
 			game.check[2][0] == comp_s && game.check[1][1] == comp_s && game.check[0][2] == comp_s
 			)
-			puts "you lost against an AI with the ability of a 2 week old baby you r-tard"
+			puts "you really are a gigantic walking poo"
 			return
 		end
 	end
