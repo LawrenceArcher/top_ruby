@@ -3,7 +3,11 @@ class Game
 	attr_accessor :symbol
 
 	def initialize(symbol)
-		@board = [[[],[],[]],[[],[],[]],[[],[],[]]]
+		@board = [
+			[" "," "," "],
+			[" "," "," "],
+			[" "," "," "]
+		]
 		@symbol = symbol.upcase
 		if @symbol == "X"
 			@comp_symbol = "O"
@@ -36,31 +40,37 @@ class Game
 	def computer_move
 		x_coord = rand(3)
 		y_coord = rand(3)
-		if @board[x_coord][y_coord] != ""
+		if @board[y_coord][x_coord] != " "
+			puts "blocked! x = #{x_coord} and y = #{y_coord}"
 			computer_move
+		else
+			move(@comp_symbol, x_coord, y_coord)
 		end
-		move(@comp_symbol, y_coord, x_coord)
 	end
 end
 
 def startGame
+	moves = 0
 	puts "What symbol would you like to play as?"
 	symbol = gets.chomp
 	game_finished = false
 	game = Game.new(symbol)
-	while game_finished == false
-		game.show_board
+	while moves < 9 && game_finished == false
+		if moves == 0
+			game.show_board
+		end
 		puts "Your turn"
 		puts "Coordinates are 0-2 on the x-axis and 0-2 on the y-axis, inputted as such: '1,2'"
 		player_input = gets.strip.split(",")
-		if game.check[player_input[0].to_i][player_input[1].to_i] != ""
-			game.player_move(player_input[0].to_i, player_input[1].to_i)
-		else
+		if game.check[player_input[1].to_i][player_input[0].to_i] != " "
 			puts "That cell is already taken"
-			#need to break the while loop here
+			redo
+		else
+			game.player_move(player_input[0].to_i, player_input[1].to_i) 
+			moves +=1
 		end
 		game.computer_move
-		game_finished = true
+		moves +=1
 	end
 end
 
