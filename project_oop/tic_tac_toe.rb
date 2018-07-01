@@ -63,7 +63,7 @@ def startGame
 		end
 		puts "Your turn"
 		player_input = gets.strip.split(",")
-		if game.check[player_input[1].to_i][player_input[0].to_i] != " "
+		if game.board[player_input[1].to_i][player_input[0].to_i] != " "
 			puts "That cell is already taken you turd"
 			redo
 		else
