@@ -23,44 +23,40 @@ end
 
 def play_game
 	game = Game.new
-	comp_arr = game.computer_arr
-	puts "initial set computer arr: #{comp_arr}"
+	@comp_arr = []
 	move = 0
 	while move < 12
 		result_arr = []
-		puts "comp_arr = #{game.computer_arr}"
-		comp_arr = game.computer_arr
-		print "comp code initialised at start of while = #{comp_arr}\n"
+		@comp_arr = game.computer_arr.clone
+		puts "comp array = #{@comp_arr}"
 		move += 1
-		puts "MOVE = #{move}"
+		puts "Current move: #{move}"
 		game.guess
 		if game.guess_arr == game.computer_arr
-			puts "You have won after #{move} moves"
 			return
 		else
 			game.guess_arr.each_with_index do |x,i|
-				if x.to_s == comp_arr[i].to_s
+				if x.to_s == @comp_arr[i].to_s
 					result_arr.push("black")
 					game.guess_arr[i] = ""
-					comp_arr[i] = ""
+					@comp_arr[i] = ""
 				end
 			end
 			game.guess_arr.map{|x|
 				x if x != ""
 			}
-			puts "comp code after black check = #{comp_arr}"
-			puts "guess arr after black check = #{game.guess_arr}"
 			game.guess_arr.each_with_index do |x,i|
-				if comp_arr.include?(x)
+				if @comp_arr.include?(x)
 					result_arr.push("white")
 					game.guess_arr[i] = ""
-					comp_arr[comp_arr.index(x)] = ""
+					@comp_arr[@comp_arr.index(x)] = ""
 				end
 			end
-			puts "comp code after white check = #{comp_arr}"
-			puts "guess arr after white check = #{game.guess_arr}"
 		end
 		puts result_arr.join(", ")
+		if move == 12
+			puts "You did not guess correctly. Game over."
+		end
 	end
 end
 
