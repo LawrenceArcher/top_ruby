@@ -1,30 +1,40 @@
 dictionary = File.open("./5desk.txt", "r").to_a
 
-@computer_word = ''
-@human_visible_word = ''
-@round = 0
-
-unless (computer_word.length >= 5 && @computer_word.length <= 12)
-    puts 'Picking word'
-    @computer_word = dictionary.sample
-    @computer_word.length.times do
-        @human_visible_word << '_ '
+def start_game
+    @computer_word = ''
+    @human_visible_word = ''
+    @round = 1
+    unless (@computer_word.length >= 5 && @computer_word.length <= 12)
+        puts 'Picking word'
+        @computer_word = dictionary.sample
     end
 end
+
+def display_word
+    @computer_word.length.times do
+        print '_ '
+    end
+end
+
+
 
 # puts 'Here is your word'
 # puts @human_visible_word
 
 def guess
-    @round += 1
     puts "This is round #{@round}. Please guess the word. Enter underscores where you don't know the letter."
+    display_word
     puts @human_visible_word
     input = gets.chomp
     if input == @computer_word
         puts "Well done you have won in #{@round} rounds!"
+    elsif input.length != @computer_word
+        puts "Sorry that isn't the right length"
+        guess
     else
+        @round += 1
         puts "Here is your current word:"
-        puts @human_visible_word
+        display_word
     end
 end
 
