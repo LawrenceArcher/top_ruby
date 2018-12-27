@@ -2,19 +2,14 @@ def start_game
     dictionary = File.open("./5desk.txt", "r").to_a
     @computer_word = ''
     @round = 1
+    @guesses = ''
     unless (@computer_word.length >= 5 && @computer_word.length <= 12)
         puts 'Picking word'
-        @computer_word = dictionary.sample
+        @computer_word = dictionary.sample.gsub(/\r\n/, '')
     end
-    @human_visible_word = ''
+    @human_visible_word = @computer_word.gsub(/\w/, '_')
     i = 1
-    @computer_word.length.times do
-        unless i == @computer_word.length
-            @human_visible_word << "_"
-        else
-            @human_visible_word << "_"
-        end
-    end
+    
     puts @computer_word.length
 end
 
@@ -28,24 +23,25 @@ end
 def guess
     i = 0
     count_correct = 0
-    puts "This is round #{@round}. Please guess the word which contains #{@computer_word.length} letters."
+    puts "This is round #{@round}. Please guess the word which contains #{@computer_word.length} letters. So far you have guessed #{@guesses}"
     display_word
     puts @human_visible_word
     input = gets.chomp
+    @guesses << "#{input}, "
     for i in 0..@computer_word.length do
         if @computer_word[i] == input
-            @human_visible_word[i] = input + " "
+            @human_visible_word[i] = input
             count_correct += 1
         end
     end
     if @human_visible_word == @computer_word
-        puts "You have one the game - good job."
-        return
-    elsif @round == 8
-        puts "You are now hanging. Game over! The word was #{@computer_word}"
+        puts "You have won the game - good job."
         return
     elsif count_correct > 0
         guess
+    elsif @round == 8
+        puts "You are now hanging. Game over! The word was #{@computer_word}"
+        return
     else
         @round += 1
         guess
