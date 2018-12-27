@@ -1,43 +1,58 @@
-dictionary = File.open("./5desk.txt", "r").to_a
-
 def start_game
+    dictionary = File.open("./5desk.txt", "r").to_a
     @computer_word = ''
-    @human_visible_word = ''
     @round = 1
     unless (@computer_word.length >= 5 && @computer_word.length <= 12)
         puts 'Picking word'
         @computer_word = dictionary.sample
     end
+    @human_visible_word = ''
+    i = 1
+    @computer_word.length.times do
+        unless i == @computer_word.length
+            @human_visible_word << "_"
+        else
+            @human_visible_word << "_"
+        end
+    end
+    puts @computer_word.length
 end
 
 def display_word
-    @computer_word.length.times do
-        print '_ '
-    end
+    puts @human_visible_word
 end
-
-
 
 # puts 'Here is your word'
 # puts @human_visible_word
 
 def guess
-    puts "This is round #{@round}. Please guess the word. Enter underscores where you don't know the letter."
+    i = 0
+    count_correct = 0
+    puts "This is round #{@round}. Please guess the word which contains #{@computer_word.length} letters."
     display_word
     puts @human_visible_word
     input = gets.chomp
-    if input == @computer_word
-        puts "Well done you have won in #{@round} rounds!"
-    elsif input.length != @computer_word
-        puts "Sorry that isn't the right length"
+    for i in 0..@computer_word.length do
+        if @computer_word[i] == input
+            @human_visible_word[i] = input + " "
+            count_correct += 1
+        end
+    end
+    if @human_visible_word == @computer_word
+        puts "You have one the game - good job."
+        return
+    elsif @round == 8
+        puts "You are now hanging. Game over! The word was #{@computer_word}"
+        return
+    elsif count_correct > 0
         guess
     else
         @round += 1
-        puts "Here is your current word:"
-        display_word
+        guess
     end
 end
 
+start_game()
 guess()
 
 #need to write logic to check whether a character was guess correctly
