@@ -17,9 +17,6 @@ def display_word
     puts @human_visible_word
 end
 
-# puts 'Here is your word'
-# puts @human_visible_word
-
 def guess
     i = 0
     count_correct = 0
@@ -28,14 +25,15 @@ def guess
     puts @human_visible_word
     input = gets.chomp
     @guesses << "#{input}, "
-    for i in 0..@computer_word.length do
-        if @computer_word[i] == input
+    for i in 0..@computer_word.length-1 do
+        puts "i is equal to #{i}"
+        if @computer_word[i].casecmp(input) == 0
             @human_visible_word[i] = input
             count_correct += 1
         end
     end
-    if @human_visible_word == @computer_word
-        puts "You have won the game - good job."
+    if @human_visible_word.casecmp(@computer_word)
+        puts "You have won the game - good job. The word was #{@computer_word}"
         return
     elsif count_correct > 0
         guess
