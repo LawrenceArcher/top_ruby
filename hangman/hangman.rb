@@ -5,7 +5,7 @@ def start_game
     @guesses = ''
     unless (@computer_word.length >= 5 && @computer_word.length <= 12)
         puts 'Picking word'
-        @computer_word = dictionary.sample.gsub(/\r\n/, '')
+        @computer_word = dictionary.sample.gsub(/\r\n/, '').downcase
     end
     @human_visible_word = @computer_word.gsub(/\w/, '_')
     i = 1
@@ -26,13 +26,12 @@ def guess
     input = gets.chomp
     @guesses << "#{input}, "
     for i in 0..@computer_word.length-1 do
-        puts "i is equal to #{i}"
         if @computer_word[i].casecmp(input) == 0
             @human_visible_word[i] = input
             count_correct += 1
         end
     end
-    if @human_visible_word.casecmp(@computer_word)
+    if @human_visible_word == @computer_word
         puts "You have won the game - good job. The word was #{@computer_word}"
         return
     elsif count_correct > 0
